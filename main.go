@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -26,7 +27,7 @@ func main() {
 	}
 	port := os.Getenv("LISTEN_PORT")
 	if port == "" {
-		port = "8080"
+		port = "8484"
 	}
 	listenSpec := fmt.Sprintf("%s:%s", host, port)
 
@@ -65,7 +66,7 @@ func HealthHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ExpandHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/xml")
 
 	var req Request
 
@@ -74,12 +75,12 @@ func ExpandHandler(w http.ResponseWriter, r *http.Request) {
 
 	expansions := expand.ExpandAddress(req.Query)
 
-	expansionThing, _ := json.Marshal(expansions)
+	expansionThing, _ := xml.Marshal(expansions)
 	w.Write(expansionThing)
 }
 
 func ParserHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/xml")
 
 	var req Request
 
@@ -87,6 +88,6 @@ func ParserHandler(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(q, &req)
 
 	parsed := parser.ParseAddress(req.Query)
-	parseThing, _ := json.Marshal(parsed)
+	parseThing, _ := xml.Marshal(parsed)
 	w.Write(parseThing)
 }
