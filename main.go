@@ -97,8 +97,9 @@ func ExpandHandler(w http.ResponseWriter, r *http.Request) {
 
 	q, _ := ioutil.ReadAll(r.Body)
 	json.Unmarshal(q, &req)
-
-	expansions := expand.ExpandAddress(req.Query)
+	opt := expand.GetDefaultExpansionOptions()
+	opt.Languages = []string{"en"}
+	expansions := expand.ExpandAddressOptions(req.Query, opt)
 
 	expansionThing, _ := xml.Marshal(expansions)
 	w.Write(expansionThing)
