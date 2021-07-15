@@ -22,26 +22,26 @@ type Request struct {
 }
 
 type SplitAddress struct {
-	house          string
-	category       string
-	near           string
-	house_number   string
-	road           string
-	unit           string
-	level          string
-	staircase      string
-	entrance       string
-	po_box         string
-	postcode       string
-	suburb         string
-	city_district  string
-	city           string
-	island         string
-	state_district string
-	state          string
-	country_region string
-	country        string
-	world_region   string
+	House          string
+	Category       string
+	Near           string
+	House_number   string
+	Road           string
+	Unit           string
+	Level          string
+	Staircase      string
+	Entrance       string
+	Po_box         string
+	Postcode       string
+	Suburb         string
+	City_district  string
+	City           string
+	Island         string
+	State_district string
+	State          string
+	Country_region string
+	Country        string
+	World_region   string
 }
 
 func main() {
