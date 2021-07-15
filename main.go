@@ -99,6 +99,10 @@ func ExpandHandler(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(q, &req)
 	opt := expand.GetDefaultExpansionOptions()
 	opt.Languages = []string{"en"}
+	// https://github.com/openvenues/libpostal/issues/302#issuecomment-358268077
+	// Use AddressToponym to ignore some of the possible expansions like "calle"
+	//which mostly apply to streets. st was expanding to Saint
+	opt.AddressComponents = expand.AddressToponym
 	expansions := expand.ExpandAddressOptions(req.Query, opt)
 
 	expansionThing, _ := xml.Marshal(expansions)
