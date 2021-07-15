@@ -110,7 +110,7 @@ func ParserHandler(w http.ResponseWriter, r *http.Request) {
 	var res SplitAddress
 	q, _ := ioutil.ReadAll(r.Body)
 	json.Unmarshal(q, &req)
-	xr := reflect.ValueOf(res)
+	xr := reflect.ValueOf(&res)
 	parsed := parser.ParseAddress(req.Query)
 	for _, parsed_component := range parsed {
 		f := reflect.Indirect(xr).FieldByName(parsed_component.Label)
