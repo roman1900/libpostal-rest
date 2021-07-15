@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/signal"
 	"reflect"
+	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -113,7 +114,7 @@ func ParserHandler(w http.ResponseWriter, r *http.Request) {
 	xr := reflect.ValueOf(&res)
 	parsed := parser.ParseAddress(req.Query)
 	for _, parsed_component := range parsed {
-		f := reflect.Indirect(xr).FieldByName(parsed_component.Label)
+		f := reflect.Indirect(xr).FieldByName(strings.Title(parsed_component.Label))
 		f.SetString(parsed_component.Value)
 	}
 	parseThing, _ := xml.Marshal(res)
