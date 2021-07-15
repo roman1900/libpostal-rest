@@ -112,7 +112,8 @@ func ParserHandler(w http.ResponseWriter, r *http.Request) {
 	q, _ := ioutil.ReadAll(r.Body)
 	json.Unmarshal(q, &req)
 	xr := reflect.ValueOf(&res)
-	parsed := parser.ParseAddress(req.Query)
+	opt := parser.ParserOptions{Country: "au", Language: "en"}
+	parsed := parser.ParseAddressOptions(req.Query, opt)
 	for _, parsed_component := range parsed {
 		f := reflect.Indirect(xr).FieldByName(strings.Title(parsed_component.Label))
 		f.SetString(parsed_component.Value)
