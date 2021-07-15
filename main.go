@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"reflect"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -18,6 +19,29 @@ import (
 
 type Request struct {
 	Query string `json:"query"`
+}
+
+type SplitAddress struct {
+	house          string
+	category       string
+	near           string
+	house_number   string
+	road           string
+	unit           string
+	level          string
+	staircase      string
+	entrance       string
+	po_box         string
+	postcode       string
+	suburb         string
+	city_district  string
+	city           string
+	island         string
+	state_district string
+	state          string
+	country_region string
+	country        string
+	world_region   string
 }
 
 func main() {
@@ -83,11 +107,15 @@ func ParserHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/xml")
 
 	var req Request
-
+	var res SplitAddress
 	q, _ := ioutil.ReadAll(r.Body)
 	json.Unmarshal(q, &req)
-
+	xr := reflect.ValueOf(res)
 	parsed := parser.ParseAddress(req.Query)
-	parseThing, _ := xml.Marshal(parsed)
+	for _, parsed_component := range parsed {
+		f := reflect.Indirect(xr).FieldByName(parsed_component.Label)
+		f.SetString(parsed_component.Value)
+	}
+	parseThing, _ := xml.Marshal(res)
 	w.Write(parseThing)
 }
